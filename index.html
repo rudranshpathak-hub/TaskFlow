@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TaskFlow — Manage Your Work</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:wght@600;700;900&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<!-- ===================== AUTH SCREEN ===================== -->
+<div class="auth-screen" id="authScreen">
+  <div class="auth-wrapper">
+    <div class="auth-brand">
+      <div class="auth-brand-logo">
+        <div class="auth-brand-icon">✦</div>
+        <span class="auth-brand-name">TaskFlow</span>
+      </div>
+      <div class="auth-brand-tagline">
+        <h2>Your work,<br>beautifully organised.</h2>
+        <p>Sign in to pick up right where you left off. Your tasks, settings, and progress are all saved to your account.</p>
+      </div>
+      <div class="auth-brand-features">
+        <div class="auth-feature"><span class="auth-feature-dot"></span>Drag &amp; drop Kanban board</div>
+        <div class="auth-feature"><span class="auth-feature-dot"></span>Per-user data persistence</div>
+        <div class="auth-feature"><span class="auth-feature-dot"></span>Priority tracking &amp; analytics</div>
+        <div class="auth-feature"><span class="auth-feature-dot"></span>Dark mode &amp; personalisation</div>
+      </div>
+    </div>
+    <div class="auth-form-panel">
+      <div class="auth-tab-switch">
+        <button class="auth-tab active" id="tabLogin">Sign In</button>
+        <button class="auth-tab" id="tabSignup">Create Account</button>
+      </div>
+
+      <!-- LOGIN -->
+      <div id="loginForm">
+        <div class="auth-form-title">Welcome back</div>
+        <div class="auth-form-sub">Sign in to access your tasks and progress.</div>
+        <div class="auth-field">
+          <label class="auth-label">Username</label>
+          <div class="auth-input-wrap">
+            <span class="auth-input-icon">👤</span>
+            <input class="auth-input" id="loginUser" type="text" placeholder="your username" autocomplete="username"/>
+          </div>
+          <div class="auth-error-msg" id="loginUserErr">Please enter your username.</div>
+        </div>
+        <div class="auth-field">
+          <label class="auth-label">Password</label>
+          <div class="auth-input-wrap">
+            <span class="auth-input-icon">🔒</span>
+            <input class="auth-input" id="loginPass" type="password" placeholder="••••••••" autocomplete="current-password"/>
+            <span class="auth-eye" id="loginEye">👁</span>
+          </div>
+          <div class="auth-error-msg" id="loginPassErr">Incorrect username or password.</div>
+        </div>
+        <button class="auth-submit" id="loginBtn"><span>→</span> Sign In</button>
+        <div class="auth-divider">or try a demo</div>
+        <button class="auth-demo-btn" id="demoBtn">⚡ Continue as Demo User</button>
+      </div>
+
+      <!-- SIGNUP -->
+      <div id="signupForm" style="display:none">
+        <div class="auth-form-title">Create account</div>
+        <div class="auth-form-sub">Join TaskFlow and start organising today.</div>
+        <div class="auth-field">
+          <label class="auth-label">Full Name</label>
+          <div class="auth-input-wrap">
+            <span class="auth-input-icon">✎</span>
+            <input class="auth-input" id="signupName" type="text" placeholder="e.g. Riya Sharma" autocomplete="name"/>
+          </div>
+          <div class="auth-error-msg" id="signupNameErr">Please enter your name.</div>
+        </div>
+        <div class="auth-field">
+          <label class="auth-label">Username</label>
+          <div class="auth-input-wrap">
+            <span class="auth-input-icon">👤</span>
+            <input class="auth-input" id="signupUser" type="text" placeholder="choose a username" autocomplete="username"/>
+          </div>
+          <div class="auth-error-msg" id="signupUserErr">Username already taken or too short.</div>
+        </div>
+        <div class="auth-field">
+          <label class="auth-label">Password</label>
+          <div class="auth-input-wrap">
+            <span class="auth-input-icon">🔒</span>
+            <input class="auth-input" id="signupPass" type="password" placeholder="min. 6 characters" autocomplete="new-password"/>
+            <span class="auth-eye" id="signupEye">👁</span>
+          </div>
+          <div class="strength-meter">
+            <div class="strength-bar" id="sb1"></div><div class="strength-bar" id="sb2"></div>
+            <div class="strength-bar" id="sb3"></div><div class="strength-bar" id="sb4"></div>
+          </div>
+          <div class="strength-label" id="strengthLabel"></div>
+          <div class="auth-error-msg" id="signupPassErr">Password must be at least 6 characters.</div>
+        </div>
+        <button class="auth-submit" id="signupBtn"><span>✦</span> Create Account</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== APP SHELL ===================== -->
+<div class="app-shell" id="appShell">
+  <header class="header">
+    <div class="logo">
+      <div class="logo-icon">✦</div>
+      <div class="logo-text">Task<span>Flow</span></div>
+    </div>
+    <nav>
+      <ul class="nav-tabs" id="navTabs">
+        <li><a href="#" data-page="home" class="active"><span class="tab-icon">⌂</span> <span class="tab-label">Home</span></a></li>
+        <li><a href="#" data-page="tasks"><span class="tab-icon">◫</span> <span class="tab-label">Tasks</span></a></li>
+        <li><a href="#" data-page="settings"><span class="tab-icon">⚙</span> <span class="tab-label">Settings</span></a></li>
+      </ul>
+    </nav>
+    <div class="header-right">
+      <button class="btn-add-task" id="openModalBtn"><span>＋</span> New Task</button>
+      <div class="user-menu" id="userMenu">
+        <div class="user-avatar" id="userAvatar">?</div>
+        <div class="user-dropdown" id="userDropdown">
+          <div class="user-dd-header">
+            <div class="user-dd-name" id="ddName">—</div>
+            <div class="user-dd-email" id="ddUsername">—</div>
+          </div>
+          <div class="user-dd-item" id="ddGoSettings"><span>⚙</span> Settings</div>
+          <div class="user-dd-divider"></div>
+          <div class="user-dd-item danger" id="ddLogout"><span>⎋</span> Sign Out</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-content">
+    <!-- HOME -->
+    <div class="page active" id="page-home">
+      <div class="home-hero">
+        <h1 id="heroGreeting">Good day — let's<br>get things done.</h1>
+        <p>Your personal command centre. Organise, prioritise, and conquer every task with elegant clarity.</p>
+      </div>
+      <div class="stats-grid" id="statsGrid"></div>
+      <div class="progress-section">
+        <div class="progress-header">
+          <span class="progress-label">📊 Overall Completion</span>
+          <span class="progress-pct" id="progressPct">0%</span>
+        </div>
+        <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+        <div class="progress-sub" id="progressSub">Loading…</div>
+      </div>
+      <div class="quote-banner">
+        <div class="quote-text" id="quoteText"></div>
+        <div class="quote-author" id="quoteAuthor"></div>
+      </div>
+      <div class="home-split">
+        <div class="home-panel">
+          <h4>🎯 Priority Breakdown</h4>
+          <div id="priorityBreakdown"></div>
+        </div>
+        <div class="home-panel">
+          <h4>⌨️ Tips &amp; Shortcuts</h4>
+          <div class="tip-item"><span class="tip-icon">✦</span><span><strong>Double-click</strong> any task card to rename it inline.</span></div>
+          <div class="tip-item"><span class="tip-icon">✦</span><span><strong>Right-click</strong> a card for quick actions — edit, complete, delete.</span></div>
+          <div class="tip-item"><span class="tip-icon">✦</span><span><strong>Drag &amp; drop</strong> cards between columns to update status.</span></div>
+          <div class="tip-item"><span class="tip-icon">✦</span><span>Click the <strong>checkbox</strong> on a card to mark it done instantly.</span></div>
+          <div class="tip-item"><span class="tip-icon">✦</span><span>Use <strong>filter chips</strong> on the Tasks tab to narrow by priority.</span></div>
+        </div>
+      </div>
+      <div class="section-title">Recent Activity</div>
+      <div class="activity-list" id="activityList"></div>
+    </div>
+
+    <!-- TASKS -->
+    <div class="page" id="page-tasks">
+      <div class="kanban-controls">
+        <div class="filter-chips">
+          <span class="chip active" data-filter="all">All</span>
+          <span class="chip" data-filter="high">🔴 High</span>
+          <span class="chip" data-filter="medium">🟡 Medium</span>
+          <span class="chip" data-filter="low">🟢 Low</span>
+          <span class="chip" data-filter="done">✅ Done</span>
+        </div>
+      </div>
+      <div class="kanban-board" id="kanbanBoard"></div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="page" id="page-settings">
+      <div class="section-title">Settings</div>
+      <div class="settings-grid">
+        <div class="settings-card">
+          <h3>⚙ Preferences</h3>
+          <div class="setting-row"><span class="setting-label">Dark Mode</span><label class="toggle"><input type="checkbox" id="darkMode"><span class="toggle-slider"></span></label></div>
+          <div class="setting-row"><span class="setting-label">Compact View</span><label class="toggle"><input type="checkbox" id="compactView"><span class="toggle-slider"></span></label></div>
+          <div class="setting-row"><span class="setting-label">Show Completed</span><label class="toggle"><input type="checkbox" id="showCompleted" checked><span class="toggle-slider"></span></label></div>
+          <div class="setting-row"><span class="setting-label">Notifications</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+        </div>
+        <div class="settings-card">
+          <h3>🗂 Data</h3>
+          <div class="setting-row"><span class="setting-label">Total Tasks</span><strong id="settingTotal">—</strong></div>
+          <div class="setting-row"><span class="setting-label">Completed</span><strong id="settingDone">—</strong></div>
+          <div class="setting-row"><span class="setting-label">Pending</span><strong id="settingPending">—</strong></div>
+          <div class="setting-row"><span class="setting-label">Clear All Tasks</span><button class="btn-secondary" id="clearAllBtn" style="padding:5px 12px;font-size:.82rem;">Clear</button></div>
+        </div>
+        <div class="settings-card">
+          <h3>🎨 Appearance</h3>
+          <div class="setting-row">
+            <span class="setting-label">Font Size</span>
+            <select class="form-select" id="fontSizeSelect" style="width:120px;padding:6px 10px">
+              <option value="16">Normal</option><option value="18">Large</option><option value="14">Small</option>
+            </select>
+          </div>
+          <div class="setting-row">
+            <span class="setting-label">Accent Colour</span>
+            <input type="color" value="#3a6fd8" id="accentColorPicker" style="width:40px;height:32px;border:1.5px solid var(--border);border-radius:6px;cursor:pointer;background:none;padding:2px;">
+          </div>
+        </div>
+        <div class="settings-card">
+          <h3>👤 Account</h3>
+          <div class="setting-row"><span class="setting-label">Signed in as</span><strong id="settingUsername">—</strong></div>
+          <div class="setting-row"><span class="setting-label">Full Name</span><strong id="settingFullName">—</strong></div>
+          <div class="setting-row"><span class="setting-label">Member since</span><strong id="settingJoined">—</strong></div>
+          <div class="setting-row"><span class="setting-label">Sign Out</span><button class="btn-secondary" id="logoutBtn2" style="padding:5px 12px;font-size:.82rem;">Sign Out</button></div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" role="dialog" aria-modal="true">
+    <button class="modal-close" id="closeModalBtn">✕</button>
+    <h2>New Task</h2>
+    <p class="modal-sub">Fill in the details and add it to your board.</p>
+    <div class="form-group"><label class="form-label">Task Title</label><input class="form-input" id="taskTitleInput" type="text" placeholder="What needs to be done?"></div>
+    <div class="form-group"><label class="form-label">Column</label><select class="form-select" id="taskColSelect"><option value="todo">To Do</option><option value="inprogress">In Progress</option><option value="done">Done</option></select></div>
+    <div class="form-group"><label class="form-label">Priority</label><select class="form-select" id="taskPrioritySelect"><option value="medium">Medium</option><option value="high">High</option><option value="low">Low</option></select></div>
+    <div class="modal-actions"><button class="btn-secondary" id="cancelModalBtn">Cancel</button><button class="btn-primary" id="saveTaskBtn">＋ Add Task</button></div>
+  </div>
+</div>
+
+<!-- CONTEXT MENU -->
+<div class="ctx-menu" id="ctxMenu" role="menu">
+  <div class="ctx-item" id="ctxEdit"><span class="ctx-icon">✎</span> Edit Task</div>
+  <div class="ctx-item" id="ctxComplete"><span class="ctx-icon">✓</span> Toggle Complete</div>
+  <div class="ctx-divider"></div>
+  <div class="ctx-item danger" id="ctxDelete"><span class="ctx-icon">✕</span> Delete Task</div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
