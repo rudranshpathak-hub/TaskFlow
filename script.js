@@ -45,8 +45,8 @@ function setSession(u) { sessionStorage.setItem('tf_session',u); }
 function clearSession(){ sessionStorage.removeItem('tf_session'); }
 function hashPass(pw){
   let h=5381;
-  for(let i=0;i<pw.length;i++) h=((h<<5)+h)^pw.charCodeAt(i);
-  return(h>>>0).toString(16);
+  for(let i=0;i<pw.length;i++) h=(Math.imul(h,33)^pw.charCodeAt(i))>>>0;
+  return h.toString(16);
 }
 
 /* ============================================================
@@ -547,6 +547,14 @@ document.addEventListener('touchmove',()=>clearTimeout(longPressTimer));
    INIT — restore session if exists
 ============================================================ */
 (function init(){
+  // Migration: wipe any users saved with the old broken hash (v1 → v2).
+  // Runs once, then stamps a flag so it never wipes again.
+  if(!localStorage.getItem('tf_hash_v2')){
+    localStorage.removeItem('tf_users');
+    sessionStorage.removeItem('tf_session');
+    localStorage.setItem('tf_hash_v2','1');
+  }
+
   const session=getSession();
   if(session){
     const users=getUsers();
